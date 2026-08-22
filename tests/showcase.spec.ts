@@ -102,4 +102,10 @@ test("complete device frames fit within standalone and embedded stages", async (
   const embedded = page.frameLocator(`iframe[title="${demoName}"]`).getByTestId("phone-frame");
   await expect(embedded).toBeVisible();
   expect(await fitsStage(embedded)).toBe(true);
+  await page.getByRole("button", { name: "Start exploring the Floydee Connect prototype" }).click();
+  const embeddedPicker = page.frameLocator(`iframe[title="${demoName}"]`).getByTestId("device-picker");
+  await embeddedPicker.click();
+  await page.frameLocator(`iframe[title="${demoName}"]`).getByTestId("device-option-pixel-10").click();
+  await expect(embedded).toHaveAttribute("data-device", "pixel-10");
+  expect(await fitsStage(embedded)).toBe(true);
 });

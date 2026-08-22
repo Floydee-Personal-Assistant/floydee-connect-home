@@ -21,7 +21,7 @@ body.public-showcase #root { min-height: 100%; }
 /* Three distinct native-scroll pages: the cover, the unified story, and the close. */
 .showcase-layout { min-height: calc(100svh - 80px); grid-template-columns: minmax(0, 0.9fr) minmax(390px, 0.66fr); gap: clamp(var(--fc-space-8), 4vw, var(--fc-space-16)); padding-top: var(--fc-space-2); padding-bottom: var(--fc-space-4); }
 .showcase-demo { width: min(100%, 430px); grid-template-rows: auto minmax(0, 1fr) auto; }
-.showcase-phone { height: min(58svh, 600px); min-height: 0; overflow: visible; }
+.showcase-phone { height: min(72svh, 760px); min-height: 0; overflow: visible; }
 .showcase-demo-callout { position: relative; z-index: 2; display: grid; width: fit-content; grid-template-columns: auto auto; gap: 0 var(--fc-space-3); align-items: center; margin: 0; padding: 0 0 var(--fc-space-3); border-bottom: 1px solid var(--fc-color-border-strong); color: var(--fc-color-text-primary); text-align: left; animation: demo-callout-enter 680ms var(--fc-motion-easing-emphasized) 820ms both; }
 .showcase-demo-callout span { grid-column: 1; color: var(--fc-color-text-secondary); font-size: var(--fc-font-size-caption); font-weight: var(--fc-font-weight-semibold); text-transform: uppercase; }
 .showcase-demo-callout strong { grid-column: 1; font-family: var(--fc-font-family-interface); font-size: var(--fc-font-size-body); font-weight: var(--fc-font-weight-semibold); letter-spacing: -0.02em; line-height: var(--fc-font-line-height-body); }
