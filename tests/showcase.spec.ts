@@ -70,6 +70,14 @@ test("page scroll remains native while the demo is still in presentation mode", 
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
 });
 
+test("mobile layout stays readable and contained", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  await expect(page.getByRole("heading", { name: "Helps you plan." })).toBeVisible();
+  await expect(page.getByRole("complementary", { name: demoName }).locator("iframe")).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+});
+
 test("prototype-only query redirects to the standalone prototype document", async ({ page }) => {
   await page.goto("/?view=prototype&theme=light&state=default");
   await expect(page).toHaveURL(/prototype\.html\?theme=light&state=default$/);
