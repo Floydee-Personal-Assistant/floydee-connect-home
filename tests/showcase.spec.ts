@@ -53,13 +53,14 @@ test("public shell does not change the isolated prototype", async ({ page }) => 
   await expect(frame.locator("#goals-heading")).toBeVisible();
 });
 
-test("cover, three chapters, and pilot close are ordered as full-page stops", async ({ page }) => {
+test("cover, unified product story, and pilot close are the three page stops", async ({ page }) => {
   await page.goto("/");
   const order = await page.locator(".showcase > section, .showcase > footer").evaluateAll((elements) => elements.map((element) => element.tagName === "FOOTER" ? "footer" : element.className));
-  expect(order).toEqual(["showcase-layout", "showcase-chapter showcase-chapter-context", "showcase-chapter showcase-chapter-intelligence", "showcase-chapter showcase-chapter-plan", "showcase-pilot", "footer"]);
+  expect(order).toEqual(["showcase-layout", "showcase-story", "showcase-closing"]);
   await expect(page.getByRole("heading", { name: "Capture what matters." })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Understand the signal." })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Protect the promise." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Build the planning layer with us." })).toBeVisible();
 });
 
 test("page scroll remains native while the demo is still in presentation mode", async ({ page }) => {
