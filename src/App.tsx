@@ -1,4 +1,4 @@
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, CalendarDays, Mail, MessageCircle, Mic, Smartphone, Target } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { MobileRuntime } from "./mobile";
 import Prototype, { type PrototypeTourStage } from "./Prototype";
@@ -113,9 +113,18 @@ export default function App() {
       <section className="showcase-story" aria-label="How Floydee Connect helps">
         <p className="showcase-loop">Promise <span>→</span> Capacity <span>→</span> Risk <span>→</span> Intervention <span>→</span> Proof of delivery <span>→</span> Learning</p>
         <div className="showcase-features">
-          <section><span>01</span><h2>Capture context</h2><p>Bring in permitted real-world and digital context from integrations and deliberate devices.</p></section>
-          <section><span>02</span><h2>Make sense of it</h2><p>Turn context into topics, commitments, and supporting evidence.</p></section>
-          <section><span>03</span><h2>Align and act</h2><p>Connect topics to goals, understand capacity, and choose the next step.</p></section>
+          <section className="showcase-pillar showcase-pillar-capture">
+            <span>01 — Context</span><h2>Capture the world around you</h2><p>With permission, bring together deliberate device capture and approved digital sources.</p>
+            <div className="signal-cloud" aria-label="Examples of permitted context sources"><i><Smartphone aria-hidden="true" size={16} />Device</i><i><CalendarDays aria-hidden="true" size={16} />Calendar</i><i><Mic aria-hidden="true" size={16} />Meetings</i><i><Mail aria-hidden="true" size={16} />Mail</i><i><MessageCircle aria-hidden="true" size={16} />Work tools</i></div>
+          </section>
+          <section className="showcase-pillar showcase-pillar-intelligence">
+            <span>02 — Intelligence</span><h2>Understand what matters now</h2><p>Turn context into topics, commitments, and evidence. Use your goals, preferences, and corrections to make priorities clear.</p>
+            <div className="intelligence-packet" aria-label="Reviewable intelligence packet"><span>Topic</span><b>Release readiness</b><small>Goal · Ship Capture V1</small><em>Capacity checked</em></div>
+          </section>
+          <section className="showcase-pillar showcase-pillar-plan">
+            <span>03 — Plan</span><h2>Protect the important work</h2><p>See realistic capacity, review risks early, and choose the next step before a meaningful promise slips.</p>
+            <div className="plan-signal" aria-label="A planned commitment"><Target aria-hidden="true" size={18} /><span><b>Next commitment</b><small>Review delivery options</small></span><i>Ready to review</i></div>
+          </section>
         </div>
       </section>
       <footer className="showcase-footer">

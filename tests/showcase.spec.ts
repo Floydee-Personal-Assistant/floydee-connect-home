@@ -28,5 +28,5 @@ test("touch and reduced-motion visitors are not shown an autoplay tour", async (
   await expect(page.getByText("Guided preview", { exact: true })).toHaveCount(0);
   await expect(page.getByRole("heading", { name: "Helps you plan." })).toBeVisible();
   await expect(page.getByRole("link", { name: "admin@floydee.com" })).toHaveAttribute("href", "mailto:admin@floydee.com");
-  await expect(page.getByRole("heading", { name: "Capture context" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Capture the world around you" })).toBeVisible();
 });
