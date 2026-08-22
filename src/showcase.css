@@ -19,9 +19,9 @@ body.public-showcase #root { min-height: 100%; }
 @keyframes loader-line { from { transform: translateX(-100%); } to { transform: translateX(260%); } } @keyframes demo-callout-enter { from { opacity: 0; transform: translateY(var(--fc-space-6)); } to { opacity: 1; transform: translateY(0); } } @keyframes callout-arrow { 50% { transform: translate(5px, 5px); } } @keyframes source-row-in { from { opacity: 0; transform: translateX(calc(var(--fc-space-4) * -1)); } to { opacity: 1; transform: translateX(0); } }
 
 /* Three distinct native-scroll pages: the cover, the unified story, and the close. */
-.showcase-layout { min-height: calc(100svh - 80px); grid-template-columns: minmax(0, 0.9fr) minmax(390px, 0.66fr); gap: clamp(var(--fc-space-8), 4vw, var(--fc-space-16)); padding-top: var(--fc-space-2); padding-bottom: var(--fc-space-4); }
-.showcase-demo { width: min(100%, 430px); grid-template-rows: auto minmax(0, 1fr) auto; }
-.showcase-phone { height: min(72svh, 760px); min-height: 0; overflow: visible; }
+.showcase-layout { min-height: calc(100svh - 80px); grid-template-columns: minmax(0, 0.78fr) minmax(440px, 0.82fr); gap: clamp(var(--fc-space-8), 4vw, var(--fc-space-16)); padding-top: var(--fc-space-2); padding-bottom: var(--fc-space-4); }
+.showcase-demo { width: min(100%, 530px); grid-template-rows: auto minmax(0, 1fr) auto; }
+.showcase-phone { height: min(78svh, 900px); min-height: 0; overflow: visible; }
 .showcase-demo-callout { position: relative; z-index: 2; display: grid; width: fit-content; grid-template-columns: auto auto; gap: 0 var(--fc-space-3); align-items: center; margin: 0; padding: 0 0 var(--fc-space-3); border-bottom: 1px solid var(--fc-color-border-strong); color: var(--fc-color-text-primary); text-align: left; animation: demo-callout-enter 680ms var(--fc-motion-easing-emphasized) 820ms both; }
 .showcase-demo-callout span { grid-column: 1; color: var(--fc-color-text-secondary); font-size: var(--fc-font-size-caption); font-weight: var(--fc-font-weight-semibold); text-transform: uppercase; }
 .showcase-demo-callout strong { grid-column: 1; font-family: var(--fc-font-family-interface); font-size: var(--fc-font-size-body); font-weight: var(--fc-font-weight-semibold); letter-spacing: -0.02em; line-height: var(--fc-font-line-height-body); }
