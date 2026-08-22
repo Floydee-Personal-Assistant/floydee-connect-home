@@ -41,6 +41,14 @@ test("touch and reduced-motion visitors are not shown an autoplay tour", async (
   await expect(page.getByRole("heading", { name: "Build the planning layer with us." })).toBeVisible();
 });
 
+test("public shell styling does not change prototype view headings", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Goals" }).click();
+  const size = await page.locator("#goals-heading").evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize));
+  expect(size).toBeLessThan(40);
+});
+
 test("vertical wheel input over the phone continues through the page story", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");

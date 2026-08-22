@@ -39,7 +39,7 @@ body.public-showcase #root { min-height: 100%; }
 }
 
 .showcase-hero { display: grid; max-width: var(--fc-layout-content-reading); gap: var(--fc-space-6); align-content: center; }
-.showcase h1 { max-width: var(--fc-layout-content-reading); margin: 0; font-family: var(--fc-font-family-editorial); font-size: clamp(var(--fc-font-size-metric), 8vw, calc(var(--fc-font-size-metric) + var(--fc-space-12))); font-weight: var(--fc-font-weight-regular); letter-spacing: -0.065em; line-height: 0.92; }
+.showcase-hero h1 { max-width: var(--fc-layout-content-reading); margin: 0; font-family: var(--fc-font-family-editorial); font-size: clamp(var(--fc-font-size-metric), 8vw, calc(var(--fc-font-size-metric) + var(--fc-space-12))); font-weight: var(--fc-font-weight-regular); letter-spacing: -0.065em; line-height: 0.92; }
 .showcase-intro { max-width: 31ch; margin: 0; color: var(--fc-color-text-secondary); font-size: var(--fc-font-size-body-large); line-height: var(--fc-font-line-height-body-large); }
 .showcase-note { margin: var(--fc-space-2) 0 0; padding-left: var(--fc-space-4); border-left: 1px solid var(--fc-color-border-strong); color: var(--fc-color-text-secondary); font-size: var(--fc-font-size-caption); line-height: var(--fc-font-line-height-caption); }
 .showcase-hero-path { display: flex; flex-wrap: wrap; gap: var(--fc-space-2); margin-top: var(--fc-space-2); color: var(--fc-color-text-secondary); font-size: var(--fc-font-size-caption); line-height: var(--fc-font-line-height-caption); }
@@ -100,7 +100,7 @@ body.public-showcase #root { min-height: 100%; }
 
 @media (max-width: 960px) {
   .showcase-layout { grid-template-columns: minmax(0, 1fr) minmax(320px, 0.72fr); gap: var(--fc-space-8); }
-  .showcase h1 { font-size: clamp(var(--fc-font-size-display), 7vw, var(--fc-font-size-metric)); }
+  .showcase-hero h1 { font-size: clamp(var(--fc-font-size-display), 7vw, var(--fc-font-size-metric)); }
   .showcase-phone { height: min(70svh, 640px); min-height: 500px; }
 }
 
@@ -119,7 +119,7 @@ body.public-showcase #root { min-height: 100%; }
   .showcase { padding: var(--fc-space-3) var(--fc-layout-gutter-mobile); }
   .showcase-wordmark { font-size: var(--fc-font-size-body-large); }
   .showcase-contact { font-size: var(--fc-font-size-caption); }
-  .showcase h1 { font-size: clamp(var(--fc-font-size-display), 16vw, var(--fc-font-size-metric)); }
+  .showcase-hero h1 { font-size: clamp(var(--fc-font-size-display), 16vw, var(--fc-font-size-metric)); }
   .showcase-intro { font-size: var(--fc-font-size-body); line-height: var(--fc-font-line-height-body); }
   .showcase-phone { height: 620px; min-height: 0; }
   .showcase-loop { text-align: left; }
