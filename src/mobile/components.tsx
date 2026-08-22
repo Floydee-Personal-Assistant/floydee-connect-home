@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { mobileAsset } from "./assets";
 import { KeyboardInput, useKeyboard } from "./Keyboard";
 import { useMobileDevice } from "./Device";
 
@@ -41,7 +42,7 @@ export function HomeIndicator() {
       <img
         className="android-navigation-bar"
         data-testid="android-navigation-bar"
-        src="/assets/android/navigation-bar.svg"
+        src={mobileAsset("/assets/android/navigation-bar.svg")}
         alt=""
         aria-hidden="true"
         draggable={false}
@@ -98,8 +99,8 @@ function StatusIndicators({ platform }: { platform: "ios" | "android" }) {
       data-platform={platform}
       src={
         platform === "android"
-          ? "/assets/status/status-icons.svg"
-          : "/assets/status/ios-status-icons.svg"
+          ? mobileAsset("/assets/status/status-icons.svg")
+          : mobileAsset("/assets/status/ios-status-icons.svg")
       }
       alt=""
       aria-hidden="true"

@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/?view=prototype");
   await page.getByRole("button", { name: "Notes", exact: true }).click();
 });
 
