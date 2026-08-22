@@ -1,5 +1,12 @@
 @import "../design/floydee-connect.css";
 
+.prototype-entry {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
 .prototype-shell {
   position: absolute;
   inset: 0;
