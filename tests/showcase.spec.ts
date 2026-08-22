@@ -49,6 +49,14 @@ test("public shell styling does not change prototype view headings", async ({ pa
   expect(size).toBeLessThan(40);
 });
 
+test("early pilot is the final conversion section with a privacy-first footer", async ({ page }) => {
+  await page.goto("/");
+  const order = await page.locator(".showcase > section, .showcase > footer").evaluateAll((elements) => elements.map((element) => element.tagName === "FOOTER" ? "footer" : element.className));
+  expect(order).toEqual(["showcase-layout", "showcase-story", "showcase-pilot", "footer"]);
+  await expect(page.getByText("© 2026 Floydee Innovations Private Limited")).toBeVisible();
+  await expect(page.getByText("Your data stays protected. You stay in control.")).toBeVisible();
+});
+
 test("vertical wheel input over the phone continues through the page story", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");

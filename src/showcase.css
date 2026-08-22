@@ -91,6 +91,8 @@ body.public-showcase #root { min-height: 100%; }
 .pilot-form > p { grid-column: 1 / -1; margin: 0; color: var(--fc-color-text-secondary); font-size: var(--fc-font-size-caption); }
 .showcase-footer { max-width: var(--fc-layout-content-maximum); margin: 0 auto; padding-top: var(--fc-space-5); border-top: 1px solid var(--fc-color-border-subtle); }
 .showcase-footer p, .showcase-footer a { margin: 0; color: var(--fc-color-text-secondary); font-size: var(--fc-font-size-caption); line-height: var(--fc-font-line-height-caption); }
+.showcase-trust { display: inline-flex; gap: var(--fc-space-2); align-items: center; }
+.showcase-trust svg { flex: 0 0 auto; color: var(--fc-color-text-primary); }
 
 .is-direct-prototype { height: 100svh; padding: 0; overflow: hidden; }
 .is-direct-prototype .showcase-nav, .is-direct-prototype .showcase-hero, .is-direct-prototype .showcase-story, .is-direct-prototype .showcase-footer, .is-direct-prototype .showcase-demo-status { display: none; }

@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowUpRight, CalendarDays, Mail, MessageCircle, Mic, Smartphone, Target } from "lucide-react";
+import { ArrowDown, ArrowUpRight, CalendarDays, Mail, MessageCircle, Mic, ShieldCheck, Smartphone, Target } from "lucide-react";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { MobileRuntime } from "./mobile";
 import Prototype, { type PrototypeTourStage } from "./Prototype";
@@ -155,22 +155,6 @@ export default function App() {
           <p className="showcase-demo-hint">Hover or tap the phone to take control.</p>
         </aside>
       </section>
-      <section className="showcase-pilot" aria-labelledby="pilot-title">
-        <div>
-          <p className="showcase-kicker">Early pilot</p>
-          <h2 id="pilot-title">Build the planning layer with us.</h2>
-          <p>For a small group of teams that want to make commitments, capacity, and delivery more visible.</p>
-          <small>Share your details to open an email draft. Nothing is sent from this site.</small>
-        </div>
-        <form className="pilot-form" onSubmit={openInterestDraft}>
-          <label>Name<input name="name" autoComplete="name" required /></label>
-          <label>Work email<input name="email" type="email" autoComplete="email" required /></label>
-          <label>Company<input name="company" autoComplete="organization" required /></label>
-          <label>Team size <select name="team" defaultValue=""><option value="" disabled>Select one</option><option>1–10</option><option>11–50</option><option>51–250</option><option>251+</option></select></label>
-          <button type="submit">Show interest <ArrowUpRight aria-hidden="true" size={17} /></button>
-          {interestReady ? <p role="status">Your email draft is ready to review.</p> : null}
-        </form>
-      </section>
       <section className="showcase-story" id="story" aria-label="How Floydee Connect helps">
         <p className="showcase-loop">Promise <span>→</span> Capacity <span>→</span> Risk <span>→</span> Intervention <span>→</span> Proof of delivery <span>→</span> Learning</p>
         <div className="showcase-features">
@@ -188,8 +172,25 @@ export default function App() {
           </section>
         </div>
       </section>
+      <section className="showcase-pilot" aria-labelledby="pilot-title">
+        <div>
+          <p className="showcase-kicker">Early pilot</p>
+          <h2 id="pilot-title">Build the planning layer with us.</h2>
+          <p>For a small group of teams that want to make commitments, capacity, and delivery more visible.</p>
+          <small>Share your details to open an email draft. Nothing is sent from this site.</small>
+        </div>
+        <form className="pilot-form" onSubmit={openInterestDraft}>
+          <label>Name<input name="name" autoComplete="name" required /></label>
+          <label>Work email<input name="email" type="email" autoComplete="email" required /></label>
+          <label>Company<input name="company" autoComplete="organization" required /></label>
+          <label>Team size <select name="team" defaultValue=""><option value="" disabled>Select one</option><option>1–10</option><option>11–50</option><option>51–250</option><option>251+</option></select></label>
+          <button type="submit">Show interest <ArrowUpRight aria-hidden="true" size={17} /></button>
+          {interestReady ? <p role="status">Your email draft is ready to review.</p> : null}
+        </form>
+      </section>
       <footer className="showcase-footer">
-        <p>Prototype. Synthetic data only.</p>
+        <p>© 2026 Floydee Innovations Private Limited</p>
+        <p className="showcase-trust"><ShieldCheck aria-hidden="true" size={16} />Your data stays protected. You stay in control.</p>
         <a href="mailto:admin@floydee.com">admin@floydee.com</a>
       </footer>
     </main>
