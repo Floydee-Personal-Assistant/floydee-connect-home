@@ -87,6 +87,16 @@ test("desktop cover keeps the copy close to the unchanged phone demo", async ({ 
   expect(geometry.cover!.height).toBeLessThanOrEqual(geometry.viewportHeight);
 });
 
+test("desktop demo column has a subtle surface and separator without changing the phone", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  const demo = page.getByRole("complementary", { name: demoName });
+  await expect(demo).toBeVisible();
+  expect(await demo.evaluate((element) => getComputedStyle(element, "::before").backgroundColor)).not.toBe("rgba(0, 0, 0, 0)");
+  expect(await demo.evaluate((element) => getComputedStyle(element, "::after").width)).toBe("1px");
+  await expect(page.frameLocator(`iframe[title="${demoName}"]`).getByTestId("phone-frame")).toBeVisible();
+});
+
 test("mobile layout stays readable and contained", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
