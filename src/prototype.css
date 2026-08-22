@@ -10,6 +10,15 @@
   transition: background var(--fc-motion-duration-transition) var(--fc-motion-easing-standard), color var(--fc-motion-duration-transition) var(--fc-motion-easing-standard);
 }
 
+/* Keep the device control in a dedicated lane above the scaled phone preview. */
+.prototype-entry[data-embedded="showcase"] .phone-stage {
+  padding-top: 58px;
+}
+
+.prototype-entry[data-embedded="showcase"] .device-menu-bar {
+  top: 10px;
+}
+
 .floydee-scroll,
 .app-screen { background: var(--fc-color-surface-canvas); }
 

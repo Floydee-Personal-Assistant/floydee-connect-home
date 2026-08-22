@@ -18,6 +18,7 @@ function notifyParent(type: "floydee-prototype-ready" | "floydee-prototype-inter
 
 function PrototypeEntry() {
   const [tourStage, setTourStage] = useState<PrototypeTourStage | null>(null);
+  const embedded = new URLSearchParams(window.location.search).get("embed") === "showcase";
 
   useEffect(() => {
     const receiveTourStage = (event: MessageEvent<unknown>) => {
@@ -29,7 +30,7 @@ function PrototypeEntry() {
     return () => window.removeEventListener("message", receiveTourStage);
   }, []);
 
-  return <div className="prototype-entry" data-tour-stage={tourStage ?? "manual"} onPointerDownCapture={() => notifyParent("floydee-prototype-interacted")}><MobileRuntime frameFit="container"><Prototype tourStage={tourStage} /></MobileRuntime></div>;
+  return <div className="prototype-entry" data-embedded={embedded ? "showcase" : undefined} data-tour-stage={tourStage ?? "manual"} onPointerDownCapture={() => notifyParent("floydee-prototype-interacted")}><MobileRuntime frameFit="container"><Prototype tourStage={tourStage} /></MobileRuntime></div>;
 }
 
 ReactDOM.createRoot(document.getElementById("root")!).render(<React.StrictMode><PrototypeEntry /></React.StrictMode>);

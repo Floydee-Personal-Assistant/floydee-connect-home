@@ -16,7 +16,7 @@ test("prominent prototype callout unlocks direct exploration", async ({ page }) 
   const demo = page.getByRole("complementary", { name: demoName });
   const callout = page.getByRole("button", { name: "Open interactive prototype" });
   await expect(callout).toBeVisible();
-  await expect(callout).toContainText("Click the prototype to explore your plan.");
+  await expect(callout).toContainText("Click the phone to explore.");
   await callout.click();
   await expect(demo).toHaveAttribute("data-demo-activated", "true");
   await expect(callout).toHaveCount(0);
@@ -72,6 +72,6 @@ test("page scroll remains native while the demo is still in presentation mode", 
 
 test("prototype-only query redirects to the standalone prototype document", async ({ page }) => {
   await page.goto("/?view=prototype&theme=light&state=default");
-  await expect(page).toHaveURL(/prototype\.html\?theme=light&state=default/);
+  await expect(page).toHaveURL(/prototype\.html\?theme=light&state=default$/);
   await expect(page.getByTestId("phone-frame")).toBeVisible();
 });
