@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 const demoName = "Interactive Floydee Connect prototype";
+const localBaseUrl = `http://127.0.0.1:${process.env.MOBILE_RUNTIME_TEST_PORT ?? 4174}`;
 
 test("showcase opens quickly with a separate live prototype", async ({ page }) => {
   await page.goto("/");
@@ -103,6 +104,37 @@ test("mobile layout stays readable and contained", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Helps you plan." })).toBeVisible();
   await expect(page.getByRole("complementary", { name: demoName }).locator("iframe")).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+});
+
+test("first touch scroll focuses the prototype once and leaves subsequent scrolling native", async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
+  const page = await context.newPage();
+  await page.goto(localBaseUrl);
+  await expect(page.locator(".showcase-loader")).toBeHidden();
+  const demo = page.getByRole("complementary", { name: demoName });
+  await page.evaluate(() => window.scrollTo(0, 260));
+  await expect(demo).toHaveAttribute("data-mobile-focus", "true");
+  await expect(page.frameLocator(`iframe[title="${demoName}"]`).locator(".prototype-entry")).toHaveAttribute("data-mobile-focus", "true");
+  await expect(demo).toHaveAttribute("data-demo-activated", "false");
+  expect(await demo.locator(".showcase-phone").evaluate((element) => element.getBoundingClientRect().height)).toBeGreaterThan(700);
+  const focusedScrollY = await page.evaluate(() => window.scrollY);
+  await page.evaluate(() => window.scrollBy(0, 260));
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(focusedScrollY);
+  await page.getByRole("button", { name: "Start exploring the Floydee Connect prototype" }).click();
+  await expect(demo).toHaveAttribute("data-demo-activated", "true");
+  await context.close();
+});
+
+test("mobile focus is instant when reduced motion is preferred", async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true, reducedMotion: "reduce" });
+  const page = await context.newPage();
+  await page.goto(localBaseUrl);
+  await expect(page.locator(".showcase-loader")).toBeHidden();
+  await page.evaluate(() => window.scrollTo(0, 260));
+  const demo = page.getByRole("complementary", { name: demoName });
+  await expect(demo).toHaveAttribute("data-mobile-focus", "true");
+  expect(await demo.evaluate((element) => getComputedStyle(element).transitionProperty)).toBe("none");
+  await context.close();
 });
 
 test("prototype-only query redirects to the standalone prototype document", async ({ page }) => {

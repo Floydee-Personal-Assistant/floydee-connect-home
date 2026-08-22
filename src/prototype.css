@@ -22,6 +22,10 @@
   padding-top: 58px;
 }
 
+.prototype-entry[data-embedded="showcase"][data-mobile-focus="true"] .phone-stage {
+  padding: 58px var(--fc-space-2) var(--fc-space-2);
+}
+
 .prototype-entry[data-embedded="showcase"] .device-menu-bar {
   top: 10px;
 }
