@@ -22,6 +22,15 @@ test("guided tour pauses for direct exploration and resumes after leaving the de
   await expect(demo).toHaveAttribute("data-tour-paused", "false", { timeout: 5_000 });
 });
 
+test("guided tour follows the deliberate capture sequence", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  const demo = page.getByRole("complementary", { name: "Interactive Floydee Connect prototype" });
+  await expect(demo).toHaveAttribute("data-tour-stage", "capture");
+  await expect(demo).toHaveAttribute("data-tour-stage", "recording", { timeout: 6_000 });
+  await expect(page.getByText("Hover or tap the phone to take control.")).toBeVisible();
+});
+
 test("touch and reduced-motion visitors are not shown an autoplay tour", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
@@ -29,6 +38,7 @@ test("touch and reduced-motion visitors are not shown an autoplay tour", async (
   await expect(page.getByRole("heading", { name: "Helps you plan." })).toBeVisible();
   await expect(page.getByRole("link", { name: "admin@floydee.com" })).toHaveAttribute("href", "mailto:admin@floydee.com");
   await expect(page.getByRole("heading", { name: "Capture the world around you" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Build the planning layer with us." })).toBeVisible();
 });
 
 test("vertical wheel input over the phone continues through the page story", async ({ page }) => {

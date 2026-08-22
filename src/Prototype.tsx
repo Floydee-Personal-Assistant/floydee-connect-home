@@ -51,7 +51,7 @@ import { BottomSheet, KeyboardInput, KeyboardTextarea, MobileScroll, useKeyboard
 
 type Theme = "light" | "dark";
 type DemoState = "default" | "loading" | "empty" | "stale" | "error";
-export type PrototypeTourStage = "capture" | "capacity" | "risk" | "intervention" | "proof";
+export type PrototypeTourStage = "capture" | "recording" | "created" | "notes" | "goals" | "calendar";
 type Sheet = "capture" | "intervention" | "item" | "defer" | "itemEdit" | "renegotiate" | "voiceReview" | "checkinVoice" | "menu" | "search" | "noteCapture" | "noteDetail" | "noteEdit" | "noteAction" | "noteExport" | "noteShare" | "familySharing" | "familyInvite" | "catchupSettings" | "goalDetail" | "goalCreate" | "topicDetail" | "alignment" | "taskNoteCapture" | "projectDetail" | "projectCreate" | "projectAssignment" | "contacts" | "personDetail" | "peoplePicker" | "askConversations" | null;
 type AudioState = "idle" | "recording" | "ready" | "processing" | "created";
 type AppView = "home" | "notes" | "goals" | "ask" | "checkin" | "calendar";
@@ -618,6 +618,8 @@ export default function Prototype({ tourStage }: { tourStage?: PrototypeTourStag
     setTenantMenuOpen(false);
     setNotice("");
     setAudioState("idle");
+    setNoteCaptureMode("choose");
+    setSheet(null);
 
     if (tourStage === "capture") {
       setView("home");
@@ -625,29 +627,51 @@ export default function Prototype({ tourStage }: { tourStage?: PrototypeTourStag
       return;
     }
 
-    if (tourStage === "capacity") {
-      setView("calendar");
-      setSheet(null);
-      return;
-    }
-
-    if (tourStage === "risk") {
+    if (tourStage === "recording") {
       setView("home");
-      setSelectedItemId("v1-scope-decision");
-      setSheet(null);
+      setNoteCaptureMode("voice");
+      setAudioSeconds(7);
+      setAudioState("recording");
+      setSheet("noteCapture");
       return;
     }
 
-    if (tourStage === "intervention") {
+    if (tourStage === "created") {
+      setItems((current) => current.some((item) => item.id === "tour-captured-task") ? current : [{
+        id: "tour-captured-task",
+        kind: "Task",
+        title: "Prepare the pilot walkthrough",
+        window: "Today, 14:30",
+        effort: "30m",
+        source: "Voice Note",
+        sourceState: "available",
+        freshness: "Captured now",
+        confidence: "Ready to review",
+        permission: "User confirmed",
+        order: 0.5,
+        prioritized: true,
+        alignment: { kind: "goal", id: "goal-capture-v1" },
+      }, ...current]);
       setView("home");
-      setSelectedItemId("v1-scope-decision");
-      setSheet("intervention");
+      setAudioState("created");
+      setSheet("checkinVoice");
       return;
     }
 
-    setView("notes");
-    setSelectedNoteId(initialNotes[0].id);
-    setSheet("noteDetail");
+    if (tourStage === "notes") {
+      setView("notes");
+      setSelectedNoteId(initialNotes[0].id);
+      setSheet("noteDetail");
+      return;
+    }
+
+    if (tourStage === "goals") {
+      setView("goals");
+      setGoalsTab("goals");
+      return;
+    }
+
+    setView("calendar");
   }, [tourStage]);
 
   useEffect(() => {

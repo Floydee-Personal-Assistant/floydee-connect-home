@@ -1,16 +1,17 @@
 import { ArrowDown, ArrowUpRight, CalendarDays, Mail, MessageCircle, Mic, Smartphone, Target } from "lucide-react";
-import { useEffect, useRef, useState, type WheelEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { MobileRuntime } from "./mobile";
 import Prototype, { type PrototypeTourStage } from "./Prototype";
 
-const tourStages: readonly PrototypeTourStage[] = ["capture", "capacity", "risk", "intervention", "proof"];
+const tourStages: readonly PrototypeTourStage[] = ["capture", "recording", "created", "notes", "goals", "calendar"];
 
 const tourCopy: Record<PrototypeTourStage, string> = {
-  capture: "Capture the promise",
-  capacity: "See real capacity",
-  risk: "See what needs attention",
-  intervention: "Choose the next step",
-  proof: "Keep proof and learn",
+  capture: "Choose voice capture",
+  recording: "Record a thought",
+  created: "Review the new task",
+  notes: "Open the note",
+  goals: "Connect it to a goal",
+  calendar: "See the plan in time",
 };
 
 function canAutoplay() {
@@ -25,6 +26,8 @@ export default function App() {
   const [tourStage, setTourStage] = useState<PrototypeTourStage>("capture");
   const [autoplay, setAutoplay] = useState(canAutoplay);
   const [tourPaused, setTourPaused] = useState(false);
+  const [interestReady, setInterestReady] = useState(false);
+  const demoRef = useRef<HTMLElement>(null);
   const resumeTimer = useRef<number | undefined>(undefined);
   const tourTransitioning = useRef(true);
 
@@ -67,6 +70,20 @@ export default function App() {
   useEffect(() => () => window.clearTimeout(resumeTimer.current), []);
 
   useEffect(() => {
+    const demo = demoRef.current;
+    if (!demo) return undefined;
+
+    const passVerticalScrollToPage = (event: WheelEvent) => {
+      if (Math.abs(event.deltaY) <= Math.abs(event.deltaX) || event.ctrlKey) return;
+      event.preventDefault();
+      window.scrollBy({ top: event.deltaY, behavior: "auto" });
+    };
+
+    demo.addEventListener("wheel", passVerticalScrollToPage, { capture: true, passive: false });
+    return () => demo.removeEventListener("wheel", passVerticalScrollToPage, { capture: true });
+  }, []);
+
+  useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => entries.forEach((entry) => {
         if (entry.isIntersecting) entry.target.setAttribute("data-revealed", "true");
@@ -88,10 +105,17 @@ export default function App() {
     resumeTimer.current = window.setTimeout(() => setTourPaused(false), 3600);
   };
 
-  const routeVerticalScroll = (event: WheelEvent<HTMLElement>) => {
-    if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+  const openInterestDraft = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    window.scrollBy({ top: event.deltaY, behavior: "auto" });
+    const values = new FormData(event.currentTarget);
+    const name = String(values.get("name") ?? "").trim();
+    const company = String(values.get("company") ?? "").trim();
+    const email = String(values.get("email") ?? "").trim();
+    const team = String(values.get("team") ?? "").trim();
+    const subject = `Floydee Connect early pilot — ${company || "Interest"}`;
+    const body = [`Name: ${name}`, `Company: ${company}`, `Work email: ${email}`, `Team size: ${team || "Not shared"}`, "", "I’d like to discuss the Floydee Connect early pilot."].join("\n");
+    setInterestReady(true);
+    window.location.href = `mailto:admin@floydee.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   };
 
   return (
@@ -109,6 +133,7 @@ export default function App() {
           <a className="showcase-story-link" href="#story">Read the story <ArrowDown aria-hidden="true" size={16} /></a>
         </div>
         <aside
+          ref={demoRef}
           className="showcase-demo"
           aria-label="Interactive Floydee Connect prototype"
           data-tour-stage={tourStage}
@@ -122,13 +147,29 @@ export default function App() {
             if (!event.currentTarget.contains(event.relatedTarget)) resumeTourWhenIdle();
           }}
           onPointerDown={pauseTour}
-          onWheelCapture={routeVerticalScroll}
         >
           <div className="showcase-phone">
             <MobileRuntime frameFit="container"><Prototype tourStage={autoplay && !tourPaused && !directPrototype ? tourStage : null} /></MobileRuntime>
           </div>
-          <p className="showcase-demo-status" aria-live="polite"><span>{autoplay && !tourPaused && !directPrototype ? "Guided preview" : "Interactive preview"}</span>{autoplay && !tourPaused && !directPrototype ? tourCopy[tourStage] : "Hover or focus pauses the tour."}</p>
+          <p className="showcase-demo-status" aria-live="polite"><span>{autoplay && !tourPaused && !directPrototype ? "Guided preview" : "Interactive preview"}</span>{autoplay && !tourPaused && !directPrototype ? tourCopy[tourStage] : "Explore at your own pace."}</p>
+          <p className="showcase-demo-hint">Hover or tap the phone to take control.</p>
         </aside>
+      </section>
+      <section className="showcase-pilot" aria-labelledby="pilot-title">
+        <div>
+          <p className="showcase-kicker">Early pilot</p>
+          <h2 id="pilot-title">Build the planning layer with us.</h2>
+          <p>For a small group of teams that want to make commitments, capacity, and delivery more visible.</p>
+          <small>Share your details to open an email draft. Nothing is sent from this site.</small>
+        </div>
+        <form className="pilot-form" onSubmit={openInterestDraft}>
+          <label>Name<input name="name" autoComplete="name" required /></label>
+          <label>Work email<input name="email" type="email" autoComplete="email" required /></label>
+          <label>Company<input name="company" autoComplete="organization" required /></label>
+          <label>Team size <select name="team" defaultValue=""><option value="" disabled>Select one</option><option>1–10</option><option>11–50</option><option>51–250</option><option>251+</option></select></label>
+          <button type="submit">Show interest <ArrowUpRight aria-hidden="true" size={17} /></button>
+          {interestReady ? <p role="status">Your email draft is ready to review.</p> : null}
+        </form>
       </section>
       <section className="showcase-story" id="story" aria-label="How Floydee Connect helps">
         <p className="showcase-loop">Promise <span>→</span> Capacity <span>→</span> Risk <span>→</span> Intervention <span>→</span> Proof of delivery <span>→</span> Learning</p>
