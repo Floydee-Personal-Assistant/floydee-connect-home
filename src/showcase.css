@@ -1,5 +1,8 @@
 body.public-showcase {
   overflow: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: y proximity;
+  overscroll-behavior-y: none;
   background: var(--fc-color-surface-primary);
 }
 
@@ -33,21 +36,25 @@ body.public-showcase #root { min-height: 100%; }
   gap: clamp(var(--fc-space-12), 7vw, var(--fc-space-24));
   min-height: calc(100svh - var(--fc-space-24));
   align-items: center;
+  scroll-snap-align: start;
 }
 
 .showcase-hero { display: grid; max-width: var(--fc-layout-content-reading); gap: var(--fc-space-6); align-content: center; }
 .showcase h1 { max-width: var(--fc-layout-content-reading); margin: 0; font-family: var(--fc-font-family-editorial); font-size: clamp(var(--fc-font-size-metric), 8vw, calc(var(--fc-font-size-metric) + var(--fc-space-12))); font-weight: var(--fc-font-weight-regular); letter-spacing: -0.065em; line-height: 0.92; }
 .showcase-intro { max-width: 31ch; margin: 0; color: var(--fc-color-text-secondary); font-size: var(--fc-font-size-body-large); line-height: var(--fc-font-line-height-body-large); }
 .showcase-note { margin: var(--fc-space-2) 0 0; padding-left: var(--fc-space-4); border-left: 1px solid var(--fc-color-border-strong); color: var(--fc-color-text-secondary); font-size: var(--fc-font-size-caption); line-height: var(--fc-font-line-height-caption); }
+.showcase-hero-path { display: flex; flex-wrap: wrap; gap: var(--fc-space-2); margin-top: var(--fc-space-2); color: var(--fc-color-text-secondary); font-size: var(--fc-font-size-caption); line-height: var(--fc-font-line-height-caption); }
+.showcase-hero-path span { display: inline-flex; gap: var(--fc-space-2); align-items: center; }.showcase-hero-path span:not(:last-child)::after { color: var(--fc-color-border-strong); content: "→"; }
+.showcase-story-link { display: inline-flex; width: fit-content; min-height: var(--fc-size-target-minimum); gap: var(--fc-space-2); align-items: center; margin-top: var(--fc-space-3); color: var(--fc-color-text-primary); font-size: var(--fc-font-size-caption); font-weight: var(--fc-font-weight-semibold); text-decoration: none; }.showcase-story-link svg { animation: page-cue 1800ms var(--fc-motion-easing-standard) infinite; }.showcase-story-link:focus-visible { outline: 2px solid var(--fc-color-focus-ring); outline-offset: var(--fc-space-1); }
 
-.showcase-demo { display: grid; width: min(100%, 500px); justify-self: end; gap: var(--fc-space-3); align-content: start; }
+.showcase-demo { display: grid; width: min(100%, 500px); justify-self: end; gap: var(--fc-space-3); align-content: start; touch-action: pan-y; }
 .showcase-phone { height: min(76svh, 720px); min-height: 560px; }
 .showcase-demo .phone-stage { padding: 0; }
 .showcase-demo .device-menu-bar { top: 0; right: 0; }
 .showcase-demo-status { display: flex; gap: var(--fc-space-2); margin: 0; color: var(--fc-color-text-secondary); font-size: var(--fc-font-size-caption); line-height: var(--fc-font-line-height-caption); }
 .showcase-demo-status span { color: var(--fc-color-text-primary); font-weight: var(--fc-font-weight-semibold); }
 
-.showcase-story { max-width: var(--fc-layout-content-maximum); margin: 0 auto; padding: var(--fc-space-16) 0 var(--fc-space-12); }
+.showcase-story { max-width: var(--fc-layout-content-maximum); min-height: 100svh; margin: 0 auto; padding: var(--fc-space-16) 0 var(--fc-space-12); scroll-margin-top: var(--fc-space-6); scroll-snap-align: start; }
 .showcase-loop { margin: 0; padding: var(--fc-space-5) 0; border-top: 1px solid var(--fc-color-border-subtle); border-bottom: 1px solid var(--fc-color-border-subtle); color: var(--fc-color-text-secondary); font-size: var(--fc-font-size-caption); line-height: var(--fc-font-line-height-caption); text-align: center; }
 .showcase-loop span { padding: 0 var(--fc-space-1); color: var(--fc-color-text-primary); }
 .showcase-features { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: var(--fc-space-12); }
@@ -65,6 +72,10 @@ body.public-showcase #root { min-height: 100%; }
 @keyframes signal-arrive { 0%, 100% { opacity: 0.48; transform: translateY(var(--fc-space-1)); } 16%, 72% { opacity: 1; transform: translateY(0); } }
 @keyframes packet-breathe { 0%, 20%, 100% { background: var(--fc-color-surface-primary); } 48%, 68% { background: var(--fc-color-surface-secondary); } }
 @keyframes plan-settle { 0%, 40%, 100% { opacity: 0.56; transform: translateY(var(--fc-space-1)); } 60%, 80% { opacity: 1; transform: translateY(0); } }
+@keyframes page-cue { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(var(--fc-space-1)); } }
+.showcase-story:not([data-revealed="true"]) .showcase-loop, .showcase-pillar:not([data-revealed="true"]) { opacity: 0; transform: translateY(var(--fc-space-6)); }
+.showcase-story[data-revealed="true"] .showcase-loop, .showcase-pillar[data-revealed="true"] { opacity: 1; transform: translateY(0); transition: opacity var(--fc-motion-duration-transition) var(--fc-motion-easing-standard), transform var(--fc-motion-duration-transition) var(--fc-motion-easing-standard); }
+.showcase-pillar[data-revealed="true"]:nth-child(2) { transition-delay: var(--fc-motion-duration-feedback); }.showcase-pillar[data-revealed="true"]:nth-child(3) { transition-delay: var(--fc-motion-duration-transition); }
 .showcase-footer { max-width: var(--fc-layout-content-maximum); margin: 0 auto; padding-top: var(--fc-space-5); border-top: 1px solid var(--fc-color-border-subtle); }
 .showcase-footer p, .showcase-footer a { margin: 0; color: var(--fc-color-text-secondary); font-size: var(--fc-font-size-caption); line-height: var(--fc-font-line-height-caption); }
 
@@ -101,4 +112,4 @@ body.public-showcase #root { min-height: 100%; }
   .showcase-footer { align-items: flex-start; flex-direction: column; gap: var(--fc-space-2); }
 }
 
-@media (prefers-reduced-motion: reduce), (hover: none) { .showcase-demo-status { display: none; } .signal-cloud i, .intelligence-packet, .plan-signal { animation: none; } }
+@media (prefers-reduced-motion: reduce), (hover: none) { .showcase-demo-status { display: none; } .signal-cloud i, .intelligence-packet, .plan-signal, .showcase-story-link svg { animation: none; } .showcase-story:not([data-revealed="true"]) .showcase-loop, .showcase-pillar:not([data-revealed="true"]) { opacity: 1; transform: none; } }

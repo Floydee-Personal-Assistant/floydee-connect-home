@@ -30,3 +30,12 @@ test("touch and reduced-motion visitors are not shown an autoplay tour", async (
   await expect(page.getByRole("link", { name: "admin@floydee.com" })).toHaveAttribute("href", "mailto:admin@floydee.com");
   await expect(page.getByRole("heading", { name: "Capture the world around you" })).toBeVisible();
 });
+
+test("vertical wheel input over the phone continues through the page story", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  await page.getByRole("complementary", { name: "Interactive Floydee Connect prototype" }).hover();
+  await page.mouse.wheel(0, 800);
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
+  await expect(page.locator(".showcase-story")).toHaveAttribute("data-revealed", "true");
+});

@@ -1,5 +1,5 @@
-import { ArrowUpRight, CalendarDays, Mail, MessageCircle, Mic, Smartphone, Target } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { ArrowDown, ArrowUpRight, CalendarDays, Mail, MessageCircle, Mic, Smartphone, Target } from "lucide-react";
+import { useEffect, useRef, useState, type WheelEvent } from "react";
 import { MobileRuntime } from "./mobile";
 import Prototype, { type PrototypeTourStage } from "./Prototype";
 
@@ -66,6 +66,17 @@ export default function App() {
 
   useEffect(() => () => window.clearTimeout(resumeTimer.current), []);
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.setAttribute("data-revealed", "true");
+      }),
+      { threshold: 0.22 },
+    );
+    document.querySelectorAll<HTMLElement>(".showcase-story, .showcase-pillar").forEach((element) => observer.observe(element));
+    return () => observer.disconnect();
+  }, []);
+
   const pauseTour = () => {
     window.clearTimeout(resumeTimer.current);
     setTourPaused(true);
@@ -75,6 +86,12 @@ export default function App() {
     if (!autoplay) return;
     window.clearTimeout(resumeTimer.current);
     resumeTimer.current = window.setTimeout(() => setTourPaused(false), 3600);
+  };
+
+  const routeVerticalScroll = (event: WheelEvent<HTMLElement>) => {
+    if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+    event.preventDefault();
+    window.scrollBy({ top: event.deltaY, behavior: "auto" });
   };
 
   return (
@@ -87,7 +104,9 @@ export default function App() {
         <div className="showcase-hero">
           <h1 id="showcase-title">Helps you plan.</h1>
           <p className="showcase-intro">Capture permitted context from your real and digital worlds. Turn it into topics, align it to goals, and move your plan forward.</p>
-          <p className="showcase-note">Try the prototype on the right.</p>
+          <p className="showcase-note">From the moments you capture to the promises you keep.</p>
+          <div className="showcase-hero-path" aria-label="Floydee Connect story"><span>Capture context</span><span>Understand priorities</span><span>Protect the plan</span></div>
+          <a className="showcase-story-link" href="#story">Read the story <ArrowDown aria-hidden="true" size={16} /></a>
         </div>
         <aside
           className="showcase-demo"
@@ -103,6 +122,7 @@ export default function App() {
             if (!event.currentTarget.contains(event.relatedTarget)) resumeTourWhenIdle();
           }}
           onPointerDown={pauseTour}
+          onWheelCapture={routeVerticalScroll}
         >
           <div className="showcase-phone">
             <MobileRuntime frameFit="container"><Prototype tourStage={autoplay && !tourPaused && !directPrototype ? tourStage : null} /></MobileRuntime>
@@ -110,7 +130,7 @@ export default function App() {
           <p className="showcase-demo-status" aria-live="polite"><span>{autoplay && !tourPaused && !directPrototype ? "Guided preview" : "Interactive preview"}</span>{autoplay && !tourPaused && !directPrototype ? tourCopy[tourStage] : "Hover or focus pauses the tour."}</p>
         </aside>
       </section>
-      <section className="showcase-story" aria-label="How Floydee Connect helps">
+      <section className="showcase-story" id="story" aria-label="How Floydee Connect helps">
         <p className="showcase-loop">Promise <span>→</span> Capacity <span>→</span> Risk <span>→</span> Intervention <span>→</span> Proof of delivery <span>→</span> Learning</p>
         <div className="showcase-features">
           <section className="showcase-pillar showcase-pillar-capture">
