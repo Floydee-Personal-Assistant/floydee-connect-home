@@ -51,6 +51,7 @@ import { BottomSheet, KeyboardInput, KeyboardTextarea, MobileScroll, useKeyboard
 
 type Theme = "light" | "dark";
 type DemoState = "default" | "loading" | "empty" | "stale" | "error";
+export type PrototypeTourStage = "capture" | "capacity" | "risk" | "intervention" | "proof";
 type Sheet = "capture" | "intervention" | "item" | "defer" | "itemEdit" | "renegotiate" | "voiceReview" | "checkinVoice" | "menu" | "search" | "noteCapture" | "noteDetail" | "noteEdit" | "noteAction" | "noteExport" | "noteShare" | "familySharing" | "familyInvite" | "catchupSettings" | "goalDetail" | "goalCreate" | "topicDetail" | "alignment" | "taskNoteCapture" | "projectDetail" | "projectCreate" | "projectAssignment" | "contacts" | "personDetail" | "peoplePicker" | "askConversations" | null;
 type AudioState = "idle" | "recording" | "ready" | "processing" | "created";
 type AppView = "home" | "notes" | "goals" | "ask" | "checkin" | "calendar";
@@ -483,7 +484,7 @@ function sourceIcon(source: SourceName) {
   return FileText;
 }
 
-export default function Prototype() {
+export default function Prototype({ tourStage }: { tourStage?: PrototypeTourStage | null }) {
   const { setDeviceId } = useMobileDevice();
   const keyboard = useKeyboard();
   const [theme, setTheme] = useState<Theme>(readTheme);
@@ -610,6 +611,44 @@ export default function Prototype() {
   useEffect(() => {
     setDeviceId("pixel-10");
   }, [setDeviceId]);
+
+  useEffect(() => {
+    if (!tourStage) return;
+
+    setTenantMenuOpen(false);
+    setNotice("");
+    setAudioState("idle");
+
+    if (tourStage === "capture") {
+      setView("home");
+      setSheet("noteCapture");
+      return;
+    }
+
+    if (tourStage === "capacity") {
+      setView("calendar");
+      setSheet(null);
+      return;
+    }
+
+    if (tourStage === "risk") {
+      setView("home");
+      setSelectedItemId("v1-scope-decision");
+      setSheet(null);
+      return;
+    }
+
+    if (tourStage === "intervention") {
+      setView("home");
+      setSelectedItemId("v1-scope-decision");
+      setSheet("intervention");
+      return;
+    }
+
+    setView("notes");
+    setSelectedNoteId(initialNotes[0].id);
+    setSheet("noteDetail");
+  }, [tourStage]);
 
   useEffect(() => {
     document.documentElement.dataset.fcTheme = theme;

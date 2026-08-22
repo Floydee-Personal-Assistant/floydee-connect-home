@@ -2,10 +2,10 @@ import { Capacitor } from "@capacitor/core";
 import { useEffect, type PropsWithChildren } from "react";
 import { MobileDeviceProvider, useMobileDevice } from "./Device";
 import { KeyboardDock, KeyboardProvider, useKeyboard } from "./Keyboard";
-import { NativeAppFrame, PhoneFrame } from "./PhoneFrame";
+import { NativeAppFrame, PhoneFrame, type PhoneFrameFit } from "./PhoneFrame";
 import { HomeIndicator, StatusBar } from "./components";
 
-export function MobileRuntime({ children }: PropsWithChildren) {
+export function MobileRuntime({ children, frameFit }: PropsWithChildren<{ frameFit?: PhoneFrameFit }>) {
   const nativeRuntime = Capacitor.isNativePlatform();
 
   return (
@@ -17,7 +17,7 @@ export function MobileRuntime({ children }: PropsWithChildren) {
           </KeyboardProvider>
         </NativeAppFrame>
       ) : (
-        <PhoneFrame>
+        <PhoneFrame fit={frameFit}>
         <KeyboardProvider>
           <KeyboardPreview />
           <StatusBar />

@@ -17,6 +17,8 @@ type ScreenPortalContextValue = {
   screenRef: RefObject<HTMLDivElement | null>;
 };
 
+export type PhoneFrameFit = "viewport" | "container";
+
 const ScreenPortalContext = createContext<ScreenPortalContextValue | null>(null);
 
 function suppressNativeDrag(event: DragEvent<HTMLElement>) {
@@ -37,41 +39,51 @@ export function useScreenPortal() {
   return context;
 }
 
-function getDeviceScale(deviceWidth: number, deviceHeight: number) {
+function getDeviceScale(deviceWidth: number, deviceHeight: number, container?: HTMLElement | null) {
   if (typeof window === "undefined") return 1;
 
-  const horizontal = (window.innerWidth - 48) / deviceWidth;
-  const vertical = (window.innerHeight - 48) / deviceHeight;
+  const bounds = container?.getBoundingClientRect();
+  const availableWidth = bounds ? bounds.width : window.innerWidth - 48;
+  const availableHeight = bounds ? bounds.height : window.innerHeight - 48;
+  const horizontal = availableWidth / deviceWidth;
+  const vertical = availableHeight / deviceHeight;
 
-  return Math.max(0.42, Math.min(horizontal, vertical, 1));
+  return Math.min(horizontal, vertical, 1);
 }
 
-function useDeviceScale(deviceWidth: number, deviceHeight: number) {
+function useDeviceScale(deviceWidth: number, deviceHeight: number, stageRef: RefObject<HTMLDivElement | null>, fit: PhoneFrameFit) {
   const [scale, setScale] = useState(() => getDeviceScale(deviceWidth, deviceHeight));
 
   useEffect(() => {
-    const update = () => setScale(getDeviceScale(deviceWidth, deviceHeight));
+    const update = () => setScale(getDeviceScale(deviceWidth, deviceHeight, fit === "container" ? stageRef.current : null));
 
     update();
     window.addEventListener("resize", update);
 
-    return () => window.removeEventListener("resize", update);
-  }, [deviceHeight, deviceWidth]);
+    const observer = fit === "container" && stageRef.current ? new ResizeObserver(update) : null;
+    observer?.observe(stageRef.current as HTMLDivElement);
+
+    return () => {
+      window.removeEventListener("resize", update);
+      observer?.disconnect();
+    };
+  }, [deviceHeight, deviceWidth, fit, stageRef]);
 
   return scale;
 }
 
-export function PhoneFrame({ children }: PropsWithChildren) {
+export function PhoneFrame({ children, fit = "viewport" }: PropsWithChildren<{ fit?: PhoneFrameFit }>) {
   const { device } = useMobileDevice();
   const { geometry } = device;
-  const scale = useDeviceScale(geometry.device.width, geometry.device.height);
+  const stageRef = useRef<HTMLDivElement | null>(null);
+  const scale = useDeviceScale(geometry.device.width, geometry.device.height, stageRef, fit);
   const screenRef = useRef<HTMLDivElement | null>(null);
   const contextValue = useMemo(() => ({ screenRef }), []);
   const mobileCursor = useMobileCursor();
 
   return (
     <ScreenPortalContext.Provider value={contextValue}>
-      <div className="phone-stage">
+      <div className="phone-stage" ref={stageRef} data-phone-fit={fit}>
         <DevicePicker />
         <div
           className="phone-scale-box"
