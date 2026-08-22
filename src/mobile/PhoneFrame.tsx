@@ -6,6 +6,7 @@ import {
   type RefObject,
   useContext,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -43,8 +44,9 @@ function getDeviceScale(deviceWidth: number, deviceHeight: number, container?: H
   if (typeof window === "undefined") return 1;
 
   const bounds = container?.getBoundingClientRect();
-  const availableWidth = bounds ? bounds.width : window.innerWidth - 48;
-  const availableHeight = bounds ? bounds.height : window.innerHeight - 48;
+  const styles = container ? window.getComputedStyle(container) : null;
+  const availableWidth = bounds ? bounds.width - Number.parseFloat(styles?.paddingLeft ?? "0") - Number.parseFloat(styles?.paddingRight ?? "0") : window.innerWidth - 48;
+  const availableHeight = bounds ? bounds.height - Number.parseFloat(styles?.paddingTop ?? "0") - Number.parseFloat(styles?.paddingBottom ?? "0") : window.innerHeight - 48;
   const horizontal = availableWidth / deviceWidth;
   const vertical = availableHeight / deviceHeight;
 
@@ -54,7 +56,7 @@ function getDeviceScale(deviceWidth: number, deviceHeight: number, container?: H
 function useDeviceScale(deviceWidth: number, deviceHeight: number, stageRef: RefObject<HTMLDivElement | null>, fit: PhoneFrameFit) {
   const [scale, setScale] = useState(() => getDeviceScale(deviceWidth, deviceHeight));
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const update = () => setScale(getDeviceScale(deviceWidth, deviceHeight, fit === "container" ? stageRef.current : null));
 
     update();

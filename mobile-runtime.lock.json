@@ -12,7 +12,7 @@
   "src/mobile/MobileCursor.tsx": "be2353205e05d823bc23ecae88179d712781ee9ede8fa317057c194c7c23ee7d",
   "src/mobile/MobileRuntime.tsx": "6e364fd05fa92832f94320e60207211dd529c34d08dda9656c386aecd14a8ccf",
   "src/mobile/MobileScroll.tsx": "ea3e3691f587ea13753162b9e64c1981263e5b9beddebea21a6a1551dce76430",
-  "src/mobile/PhoneFrame.tsx": "ea737dc61ef36821e9dfc15ac1bfce9f22781546c16c95ff8b8cb5ea08ab2ae1",
+  "src/mobile/PhoneFrame.tsx": "f28fb52b913d298912d7bcc4a1e6a41536097df470b6dde911736fde33718e67",
   "src/mobile/assets.ts": "72029643cb46f9f066d0e34b44cc20240756645aabb0b3297b103fdd79200651",
   "src/mobile/components.tsx": "4978d346990b0e414ddf4a17bd1cd1e7f863c9e120472a7b939a8195f289651c",
   "src/mobile/geometry.ts": "f1382e5d6cc9adfd7ac142304f2f9a5a2330db1d74b3f0848adbaf311676bf16",

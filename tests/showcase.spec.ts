@@ -11,13 +11,13 @@ test("showcase opens quickly with a separate live prototype", async ({ page }) =
   await expect(page.frameLocator(`iframe[title="${demoName}"]`).getByTestId("phone-frame")).toBeVisible();
 });
 
-test("prominent prototype callout unlocks direct exploration", async ({ page }) => {
+test("clicking the visible phone unlocks direct exploration", async ({ page }) => {
   await page.goto("/");
   const demo = page.getByRole("complementary", { name: demoName });
-  const callout = page.getByRole("button", { name: "Open interactive prototype" });
+  const callout = page.locator(".showcase-demo-callout");
   await expect(callout).toBeVisible();
   await expect(callout).toContainText("Click the phone to explore.");
-  await callout.click();
+  await page.getByRole("button", { name: "Start exploring the Floydee Connect prototype" }).click();
   await expect(demo).toHaveAttribute("data-demo-activated", "true");
   await expect(callout).toHaveCount(0);
   await expect(page.getByText("Hover or tap the phone to take control.")).toBeVisible();
@@ -36,7 +36,7 @@ test("guided tour advances inside the isolated prototype document", async ({ pag
 test("reduced motion bypasses the visual loader animation", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
-  const callout = page.getByRole("button", { name: "Open interactive prototype" });
+  const callout = page.locator(".showcase-demo-callout");
   await expect(callout).toBeVisible();
   expect(await callout.evaluate((element) => getComputedStyle(element).animationName)).toBe("none");
 });
@@ -47,7 +47,7 @@ test("public shell does not change the isolated prototype", async ({ page }) => 
   await expect(frame.locator(".prototype-shell")).toBeVisible();
   const size = await frame.locator("#today-heading").evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize));
   expect(size).toBeLessThan(40);
-  await page.getByRole("button", { name: "Open interactive prototype" }).click();
+  await page.getByRole("button", { name: "Start exploring the Floydee Connect prototype" }).click();
   await expect(frame.locator(".prototype-entry")).toHaveAttribute("data-tour-stage", "manual");
   await frame.locator(".nav-item").nth(1).click();
   await expect(frame.locator("#goals-heading")).toBeVisible();
@@ -74,4 +74,32 @@ test("prototype-only query redirects to the standalone prototype document", asyn
   await page.goto("/?view=prototype&theme=light&state=default");
   await expect(page).toHaveURL(/prototype\.html\?theme=light&state=default$/);
   await expect(page.getByTestId("phone-frame")).toBeVisible();
+});
+
+test("complete device frames fit within standalone and embedded stages", async ({ page }) => {
+  const fitsStage = async (locator: ReturnType<typeof page.locator>) => locator.evaluate((frame) => {
+    const stage = frame.closest<HTMLElement>(".phone-stage");
+    if (!stage) return false;
+    const stageBox = stage.getBoundingClientRect();
+    const frameBox = frame.getBoundingClientRect();
+    const style = getComputedStyle(stage);
+    const top = stageBox.top + Number.parseFloat(style.paddingTop);
+    const right = stageBox.right - Number.parseFloat(style.paddingRight);
+    const bottom = stageBox.bottom - Number.parseFloat(style.paddingBottom);
+    const left = stageBox.left + Number.parseFloat(style.paddingLeft);
+    return frameBox.top >= top - 1 && frameBox.right <= right + 1 && frameBox.bottom <= bottom + 1 && frameBox.left >= left - 1;
+  });
+
+  await page.goto("/?view=prototype&theme=light&state=default");
+  await expect(page.getByTestId("phone-frame")).toBeVisible();
+  expect(await fitsStage(page.getByTestId("phone-frame"))).toBe(true);
+  await page.getByTestId("device-picker").click();
+  await page.getByTestId("device-option-pixel-10").click();
+  await expect(page.getByTestId("phone-frame")).toHaveAttribute("data-device", "pixel-10");
+  expect(await fitsStage(page.getByTestId("phone-frame"))).toBe(true);
+
+  await page.goto("/");
+  const embedded = page.frameLocator(`iframe[title="${demoName}"]`).getByTestId("phone-frame");
+  await expect(embedded).toBeVisible();
+  expect(await fitsStage(embedded)).toBe(true);
 });
