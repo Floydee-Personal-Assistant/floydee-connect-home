@@ -70,6 +70,23 @@ test("page scroll remains native while the demo is still in presentation mode", 
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
 });
 
+test("desktop cover keeps the copy close to the unchanged phone demo", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  const geometry = await page.evaluate(() => {
+    const hero = document.querySelector<HTMLElement>(".showcase-hero")?.getBoundingClientRect();
+    const demo = document.querySelector<HTMLElement>(".showcase-demo")?.getBoundingClientRect();
+    const cover = document.querySelector<HTMLElement>(".showcase-layout")?.getBoundingClientRect();
+    return { hero, demo, cover, viewportHeight: window.innerHeight };
+  });
+
+  expect(geometry.hero).toBeTruthy();
+  expect(geometry.demo).toBeTruthy();
+  expect(geometry.cover).toBeTruthy();
+  expect(geometry.hero!.top).toBeLessThan(geometry.demo!.top + 180);
+  expect(geometry.cover!.height).toBeLessThanOrEqual(geometry.viewportHeight);
+});
+
 test("mobile layout stays readable and contained", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
