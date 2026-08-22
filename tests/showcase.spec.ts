@@ -1,67 +1,76 @@
 import { expect, test } from "@playwright/test";
 
-test("showcase introduces Floydee Connect alongside the interactive prototype", async ({ page }) => {
+const demoName = "Interactive Floydee Connect prototype";
+
+test("showcase opens quickly with a separate live prototype", async ({ page }) => {
   await page.goto("/");
   await expect(page).toHaveTitle("Floydee Connect");
-  await page.setViewportSize({ width: 1440, height: 900 });
-  await expect(page.getByTestId("phone-frame")).toBeVisible();
-  const phone = await page.getByTestId("phone-frame").boundingBox();
-  expect(phone).not.toBeNull();
-  expect(phone?.y).toBeLessThan(900);
-  expect((phone?.y ?? 0) + (phone?.height ?? 0)).toBeLessThanOrEqual(900);
+  await expect(page.locator(".showcase-loader")).toBeHidden();
+  const demo = page.getByRole("complementary", { name: demoName });
+  await expect(demo.locator("iframe")).toBeVisible();
+  await expect(page.frameLocator(`iframe[title="${demoName}"]`).getByTestId("phone-frame")).toBeVisible();
 });
 
-test("guided tour pauses for direct exploration and resumes after leaving the demo idle", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
+test("prominent prototype callout unlocks direct exploration", async ({ page }) => {
   await page.goto("/");
-  const demo = page.getByRole("complementary", { name: "Interactive Floydee Connect prototype" });
-  await expect(demo).toHaveAttribute("data-tour-paused", "false");
-  await demo.hover();
-  await expect(demo).toHaveAttribute("data-tour-paused", "true");
-  await page.mouse.move(20, 700);
-  await expect(demo).toHaveAttribute("data-tour-paused", "false", { timeout: 5_000 });
-});
-
-test("guided tour follows the deliberate capture sequence", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/");
-  const demo = page.getByRole("complementary", { name: "Interactive Floydee Connect prototype" });
-  await expect(demo).toHaveAttribute("data-tour-stage", "capture");
-  await expect(demo).toHaveAttribute("data-tour-stage", "recording", { timeout: 6_000 });
+  const demo = page.getByRole("complementary", { name: demoName });
+  const callout = page.getByRole("button", { name: "Open interactive prototype" });
+  await expect(callout).toBeVisible();
+  await expect(callout).toContainText("Click the prototype to explore your plan.");
+  await callout.click();
+  await expect(demo).toHaveAttribute("data-demo-activated", "true");
+  await expect(callout).toHaveCount(0);
   await expect(page.getByText("Hover or tap the phone to take control.")).toBeVisible();
 });
 
-test("touch and reduced-motion visitors are not shown an autoplay tour", async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: "reduce" });
+test("guided tour advances inside the isolated prototype document", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByText("Guided preview", { exact: true })).toHaveCount(0);
-  await expect(page.getByRole("heading", { name: "Helps you plan." })).toBeVisible();
-  await expect(page.getByRole("link", { name: "admin@floydee.com" })).toHaveAttribute("href", "mailto:admin@floydee.com");
-  await expect(page.getByRole("heading", { name: "Capture the world around you" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Build the planning layer with us." })).toBeVisible();
+  const demo = page.getByRole("complementary", { name: demoName });
+  const frame = page.frameLocator(`iframe[title="${demoName}"]`);
+  await expect(demo).toHaveAttribute("data-tour-stage", "capture");
+  await expect(frame.locator(".prototype-entry")).toHaveAttribute("data-tour-stage", "capture");
+  await expect(demo).toHaveAttribute("data-tour-stage", "recording", { timeout: 6_000 });
+  await expect(frame.locator(".prototype-entry")).toHaveAttribute("data-tour-stage", "recording");
 });
 
-test("public shell styling does not change prototype view headings", async ({ page }) => {
+test("reduced motion bypasses the visual loader animation", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
-  await page.getByRole("button", { name: "Goals" }).click();
-  const size = await page.locator("#goals-heading").evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize));
+  const callout = page.getByRole("button", { name: "Open interactive prototype" });
+  await expect(callout).toBeVisible();
+  expect(await callout.evaluate((element) => getComputedStyle(element).animationName)).toBe("none");
+});
+
+test("public shell does not change the isolated prototype", async ({ page }) => {
+  await page.goto("/");
+  const frame = page.frameLocator(`iframe[title="${demoName}"]`);
+  await expect(frame.locator(".prototype-shell")).toBeVisible();
+  const size = await frame.locator("#today-heading").evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize));
   expect(size).toBeLessThan(40);
+  await page.getByRole("button", { name: "Open interactive prototype" }).click();
+  await expect(frame.locator(".prototype-entry")).toHaveAttribute("data-tour-stage", "manual");
+  await frame.locator(".nav-item").nth(1).click();
+  await expect(frame.locator("#goals-heading")).toBeVisible();
 });
 
-test("early pilot is the final conversion section with a privacy-first footer", async ({ page }) => {
+test("cover, three chapters, and pilot close are ordered as full-page stops", async ({ page }) => {
   await page.goto("/");
   const order = await page.locator(".showcase > section, .showcase > footer").evaluateAll((elements) => elements.map((element) => element.tagName === "FOOTER" ? "footer" : element.className));
-  expect(order).toEqual(["showcase-layout", "showcase-story", "showcase-pilot", "footer"]);
-  await expect(page.getByText("© 2026 Floydee Innovations Private Limited")).toBeVisible();
-  await expect(page.getByText("Your data stays protected. You stay in control.")).toBeVisible();
+  expect(order).toEqual(["showcase-layout", "showcase-chapter showcase-chapter-context", "showcase-chapter showcase-chapter-intelligence", "showcase-chapter showcase-chapter-plan", "showcase-pilot", "footer"]);
+  await expect(page.getByRole("heading", { name: "Capture what matters." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Understand the signal." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Protect the promise." })).toBeVisible();
 });
 
-test("vertical wheel input over the phone continues through the page story", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
+test("page scroll remains native while the demo is still in presentation mode", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("complementary", { name: "Interactive Floydee Connect prototype" }).hover();
-  await page.mouse.wheel(0, 800);
+  await page.mouse.move(50, 500);
+  await page.mouse.wheel(0, 850);
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
-  await expect(page.locator(".showcase-story")).toHaveAttribute("data-revealed", "true");
+});
+
+test("prototype-only query redirects to the standalone prototype document", async ({ page }) => {
+  await page.goto("/?view=prototype&theme=light&state=default");
+  await expect(page).toHaveURL(/prototype\.html\?theme=light&state=default/);
+  await expect(page.getByTestId("phone-frame")).toBeVisible();
 });

@@ -2,7 +2,7 @@
   "scripts/check-mobile-runtime.mjs": "ee85738cc2ef889c0b457d8ccac61e017b8c5d16f393e766ec9fb7d11c9aff7f",
   "scripts/prepare-sites-build.mjs": "b6a6adaa4fab3234676116dd1c9cb6611275ab9d92dd26f5bf402393e3744bf6",
   "scripts/update-mobile-runtime-lock.mjs": "e41f76efe6fca3012a28c523ae9bd625fdce8a120e9956fde63b810725e50957",
-  "vite.config.ts": "9d9d70aed9a452b6fd0dffb0328d764bb068729c914bbc4763dd4db4ea5f2bc1",
+  "vite.config.ts": "9f451fc3d3c742d596678d9f13120f69debd6ddacf8ba97aa454c05e615b1ab4",
   "src/main.tsx": "dce002e2966249eabf264c2faa817fc18cf42f2823b314bda2d4cf95596261da",
   "src/mobile/BottomSheet.tsx": "86aca57a18398f89db6e9721e94c0d9ffcb3955381ada30f1a2c6ed92edf4411",
   "src/mobile/Carousel.tsx": "242f4a7488e18c35e9b43651c9d5877288655a6f9f1734e03e56108f17526bf7",

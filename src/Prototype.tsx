@@ -613,7 +613,11 @@ export default function Prototype({ tourStage }: { tourStage?: PrototypeTourStag
   }, [setDeviceId]);
 
   useEffect(() => {
-    if (!tourStage) return;
+    if (!tourStage) {
+      setSheet(null);
+      setAudioState("idle");
+      return;
+    }
 
     setTenantMenuOpen(false);
     setNotice("");
