@@ -1,0 +1,113 @@
+/* Generated from design/tokens/floydee-connect.tokens.json. Do not edit. */
+:root, [data-fc-theme="light"] {
+  --fc-color-border-strong: #858582;
+  --fc-color-border-subtle: #D6D6D3;
+  --fc-color-control-on-primary: #FFFFFF;
+  --fc-color-control-primary: #111111;
+  --fc-color-control-selected: #DFDFDC;
+  --fc-color-focus-ring: #1D4ED8;
+  --fc-color-state-info-foreground: #1D4ED8;
+  --fc-color-state-info-surface: #E8EFFF;
+  --fc-color-state-risk-foreground: #9F251B;
+  --fc-color-state-risk-surface: #FBE9E7;
+  --fc-color-state-success-foreground: #156A45;
+  --fc-color-state-success-surface: #E2F4EA;
+  --fc-color-state-warning-foreground: #7A4306;
+  --fc-color-state-warning-surface: #FFF1D6;
+  --fc-color-surface-canvas: #F4F4F2;
+  --fc-color-surface-inverse: #111111;
+  --fc-color-surface-primary: #FFFFFF;
+  --fc-color-surface-scrim: #111111B3;
+  --fc-color-surface-secondary: #EAEAE7;
+  --fc-color-text-disabled: #858585;
+  --fc-color-text-inverse: #FFFFFF;
+  --fc-color-text-primary: #111111;
+  --fc-color-text-secondary: #5C5C5C;
+  --fc-color-text-tertiary: #6B6B6B;
+  --fc-elevation-low: 0 6px 18px rgba(0, 0, 0, 0.14);
+  --fc-elevation-none: none;
+  --fc-font-family-editorial: Source Serif 4, ui-serif, Georgia, serif;
+  --fc-font-family-interface: Inter, ui-sans-serif, system-ui, sans-serif;
+  --fc-font-line-height-body: 24px;
+  --fc-font-line-height-body-large: 28px;
+  --fc-font-line-height-caption: 20px;
+  --fc-font-line-height-display: 52px;
+  --fc-font-line-height-heading: 40px;
+  --fc-font-line-height-metric: 68px;
+  --fc-font-line-height-title: 32px;
+  --fc-font-size-body: 16px;
+  --fc-font-size-body-large: 18px;
+  --fc-font-size-caption: 14px;
+  --fc-font-size-display: 48px;
+  --fc-font-size-heading: 32px;
+  --fc-font-size-metric: 64px;
+  --fc-font-size-title: 24px;
+  --fc-font-weight-medium: 500;
+  --fc-font-weight-regular: 400;
+  --fc-font-weight-semibold: 600;
+  --fc-layout-content-maximum: 1200px;
+  --fc-layout-content-reading: 720px;
+  --fc-layout-gutter-mobile: 20px;
+  --fc-motion-duration-feedback: 160ms;
+  --fc-motion-duration-transition: 240ms;
+  --fc-motion-easing-exit: cubic-bezier(0.4, 0, 1, 1);
+  --fc-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --fc-radius-card: 16px;
+  --fc-radius-card-large: 20px;
+  --fc-radius-compact: 8px;
+  --fc-radius-field: 12px;
+  --fc-radius-full: 999px;
+  --fc-radius-hero: 32px;
+  --fc-radius-summary: 28px;
+  --fc-size-action-floating: 56px;
+  --fc-size-navigation-bottom: 72px;
+  --fc-size-navigation-top: 64px;
+  --fc-size-target-minimum: 44px;
+  --fc-space-0: 0px;
+  --fc-space-1: 4px;
+  --fc-space-10: 40px;
+  --fc-space-12: 48px;
+  --fc-space-16: 64px;
+  --fc-space-2: 8px;
+  --fc-space-20: 80px;
+  --fc-space-24: 96px;
+  --fc-space-3: 12px;
+  --fc-space-4: 16px;
+  --fc-space-5: 20px;
+  --fc-space-6: 24px;
+  --fc-space-8: 32px;
+}
+
+[data-fc-theme="dark"] {
+  --fc-color-border-strong: #6B6B6B;
+  --fc-color-border-subtle: #363636;
+  --fc-color-control-on-primary: #111111;
+  --fc-color-control-primary: #F7F7F5;
+  --fc-color-control-selected: #303030;
+  --fc-color-focus-ring: #A8C7FF;
+  --fc-color-state-info-foreground: #A8C7FF;
+  --fc-color-state-info-surface: #172D57;
+  --fc-color-state-risk-foreground: #FFB4AB;
+  --fc-color-state-risk-surface: #461410;
+  --fc-color-state-success-foreground: #82D9AA;
+  --fc-color-state-success-surface: #113924;
+  --fc-color-state-warning-foreground: #FFD19A;
+  --fc-color-state-warning-surface: #402B0D;
+  --fc-color-surface-canvas: #0E0E0E;
+  --fc-color-surface-inverse: #F7F7F5;
+  --fc-color-surface-primary: #171717;
+  --fc-color-surface-scrim: #000000CC;
+  --fc-color-surface-secondary: #242424;
+  --fc-color-text-disabled: #737373;
+  --fc-color-text-inverse: #111111;
+  --fc-color-text-primary: #F7F7F5;
+  --fc-color-text-secondary: #C7C7C7;
+  --fc-color-text-tertiary: #A3A3A3;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --fc-motion-duration-feedback: 0ms;
+    --fc-motion-duration-transition: 0ms;
+  }
+}
